@@ -5,7 +5,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+your-secret-key-here-1234567890'
 
 # Debug rejimi
-DEBUG = True
+DEBUG = False
+HANDLER404 = 'main.middleware.custom_404'
+
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
