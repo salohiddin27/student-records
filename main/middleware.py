@@ -1,20 +1,33 @@
-from django.http import HttpResponse
+import json
+import time
 
-def custom_404(request, exception):
-    return HttpResponse("qise ", status=404)
+from django.http import JsonResponse
 
-def custom_400(request, exception):
-    return HttpResponse("Noto‘g‘ri so‘rov ", status=400)
 
-def custom_401(request, exception):
-    return HttpResponse("foydalanuvchi tizimga kirishi kerak ", status=401)
+class Custom404Middleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-def custom_403(request, exception):
-    return HttpResponse("Ruxsat yo‘q (taqiqlangan) ", status=403)
+    def __call__(self, request):
+        response = self.get_response(request)
+        if response.status_code == 404:
+            return JsonResponse({"qise": "bunday url yoq"})
+        return response
 
-def custom_405(request, exception):
-    return HttpResponse("Bu HTTP method ruxsat etilmagan (masalan GET o‘rniga POST ishlatildi) ", status=405)
 
-def custom_408(request, exception):
-    return HttpResponse("So‘rov muddati tugadi (server javob bera olmadi) ", status=408)
+class Custom400Middleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
+    def __call__(self, request):
+        started = time.time()
+        response = self.get_response(request)
+        ended = time.time()
+        if response.status_code == 400:
+            body = {
+                "xatolik": "nimadir",
+                "elapsed_time": round(ended - started, 3),
+                "content": json.loads(response.content.decode())
+            }
+            return JsonResponse(body, status=400)
+        return response

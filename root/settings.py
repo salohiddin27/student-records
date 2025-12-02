@@ -1,13 +1,14 @@
 from pathlib import Path
+import os
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-+your-secret-key-here-1234567890'
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'root.settings')
 
 # Debug rejimi
-DEBUG = False
-HANDLER404 = 'main.middleware.custom_404'
-
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -34,7 +35,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main.middleware.Custom404Middleware',
+    'main.middleware.Custom400Middleware',
+
 ]
+
+
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -53,15 +59,15 @@ TEMPLATES = [
         },
     },
 ]
-
 # Django REST framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ]
 }
+
 
 WSGI_APPLICATION = 'root.wsgi.application'
 
@@ -93,5 +99,6 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

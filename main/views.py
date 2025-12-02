@@ -5,7 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .middleware import custom_404
+
 from .models import Student, Teacher
 from .serializers import StudentSerializers, TeacherSerializers, TeacherWithSerializers
 
